@@ -33,52 +33,48 @@ public:
 	{
 		mProfessorNode = mRoot->getSceneManager("main")->getSceneNode("Professor");
 		mfishNode = mRoot->getSceneManager("main")->getSceneNode("fish");
+
+		mProfessorNode->setPosition(0, 0, 0);
 	}
 
 	bool frameStarted(const FrameEvent &evt)
 	{
-		static float ProfessorPositionZ = 0.0f;			
-		static int ProfessorSpeed = 100.0f;					//	100cm / sec
-		static float ProfessorRotationAngle = 1.0f;
-		static float FishRotating = 0.0f;
-		static float FishRotationAngle = 1.0f;
+		static float ProfessorSpeed = 100.0f;
+		static Vector3 ProfessorDirection(0, 0, 1);
+		static float ProfessorRotateDegree = 1.0f;
+		static float RotatingCount = 0.0f;
+		static bool ProfessorTurning = false;
+
+		static float FishRotetion = 0.0f;
+		static Vector3 FishDirection(0, 0, 0);
+		static float fDgree = 1.0f;
 		static int iRotateCount = 0;
-		
-		mProfessorNode->setPosition(0, 0, ProfessorPositionZ);
-		ProfessorPositionZ += ProfessorSpeed * evt.timeSinceLastFrame;
-		if (ProfessorPositionZ <= -250)
+
+		mProfessorNode->translate(0, 0, ProfessorSpeed * ProfessorDirection.z  * evt.timeSinceLastFrame);
+
+		if (250.0f <= mProfessorNode->getPosition().z || -250.0f >= mProfessorNode->getPosition().z)
+		{
+			ProfessorTurning = true;
+			ProfessorDirection.z *= -1.0f;
+		}
+		else	// -250.f  <  mProfessorNode->getPosition().z  >  250.f
 		{
 
-			mProfessorNode->yaw(Degree(ProfessorRotationAngle));
-
-			ProfessorPositionZ = -250;
-
-			if (iRotateCount == 180)
-			{
-				ProfessorSpeed *= -1;
-				iRotateCount = 0;
-			}
-			++iRotateCount;
-
 		}
-		else if (ProfessorPositionZ >= 250)
+
+		if (ProfessorTurning == true)
 		{
-
-			mProfessorNode->yaw(Degree(ProfessorRotationAngle));
-
-			ProfessorPositionZ = 250;
-
-			if (iRotateCount == 180)
+			mProfessorNode->yaw(Degree(ProfessorRotateDegree));
+			RotatingCount += ProfessorRotateDegree;
+			if (180 <= RotatingCount)
 			{
-				ProfessorSpeed *= -1;
-				iRotateCount = 0;
+				ProfessorTurning = false;
+				RotatingCount = 0.0f;
 			}
-			++iRotateCount;
 		}
 
-		
-		mfishNode->setPosition(cos(FishRotating * (3.141592 / 180.0f)) * 100.0f, 0.0f, sin(FishRotating * (3.141592 / 180.0f)) * 100.0f);
-		FishRotating += 0.5f;
+		mfishNode->setPosition(cos(FishRotetion * (3.141592 / 180.0f)) * 100.0f, 0.0f, sin(FishRotetion * (3.141592 / 180.0f)) * 100.0f);
+		FishRotetion += 0.5f;
 		/*static SceneNode* curNode = mProfessorNode;*/
 
 
@@ -170,6 +166,7 @@ public:
 		SceneNode* node2 = node1->createChildSceneNode("fish", Vector3(100.0f, 0.0f, 0.0f));
 		node2->attachObject(entity2);
 		mSceneMgr->getSceneNode("fish")->setScale(10, 10, 10);
+
 		mESCListener = new ESCListener(mKeyboard);
 		mRoot->addFrameListener(mESCListener);
 
@@ -199,7 +196,7 @@ private:
 		gridPlaneMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(1, 1, 1);
 
 		gridPlane->begin("GridPlaneMaterial", Ogre::RenderOperation::OT_LINE_LIST);
-		for (int i = 0; i < 21; i++)
+		for (int i = 0; i<21; i++)
 		{
 			gridPlane->position(-500.0f, 0.0f, 500.0f - i * 50);
 			gridPlane->position(500.0f, 0.0f, 500.0f - i * 50);
