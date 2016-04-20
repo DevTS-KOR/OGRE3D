@@ -26,15 +26,18 @@ public:
 class MainListener : public FrameListener {
 	OIS::Keyboard *mKeyboard;
 	Root* mRoot;
-	SceneNode *mProfessorNode, *mfishNode;
+	SceneNode *mProfessorNode, *mfishNode, *mfishRotationPivotNode;
 
 public:
 	MainListener(Root* root, OIS::Keyboard *keyboard) : mKeyboard(keyboard), mRoot(root)
 	{
 		mProfessorNode = mRoot->getSceneManager("main")->getSceneNode("Professor");
+		mfishRotationPivotNode = mRoot->getSceneManager("main")->getSceneNode("Pivot");
 		mfishNode = mRoot->getSceneManager("main")->getSceneNode("fish");
 
 		mProfessorNode->setPosition(0, 0, 0);
+		mfishRotationPivotNode->setPosition(0, 0, 0);
+		mfishRotationPivotNode->setInheritOrientation(false);
 	}
 
 	bool frameStarted(const FrameEvent &evt)
@@ -45,10 +48,9 @@ public:
 		static float RotatingCount = 0.0f;
 		static bool ProfessorTurning = false;
 
-		static float FishRotetion = 0.0f;
 		static Vector3 FishDirection(0, 0, 0);
-		static float fDgree = 1.0f;
-		static int iRotateCount = 0;
+		static Vector3 FishPivotPosition(0, 0, 0);
+
 
 		mProfessorNode->translate(0, 0, ProfessorSpeed * ProfessorDirection.z  * evt.timeSinceLastFrame);
 
@@ -73,10 +75,11 @@ public:
 			}
 		}
 
-		mfishNode->setPosition(cos(FishRotetion * (3.141592 / 180.0f)) * 100.0f, 0.0f, sin(FishRotetion * (3.141592 / 180.0f)) * 100.0f);
-		FishRotetion += 0.5f;
-		/*static SceneNode* curNode = mProfessorNode;*/
-
+		mfishRotationPivotNode->yaw(Degree(-1));
+		FishPivotPosition.x = mProfessorNode->getPosition().x;
+		FishPivotPosition.y = mProfessorNode->getPosition().y;
+		FishPivotPosition.z = mProfessorNode->getPosition().z;
+		mfishRotationPivotNode->setPosition(FishPivotPosition);
 
 		return true;
 	}
@@ -162,10 +165,14 @@ public:
 		SceneNode* node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("Professor", Vector3(0.0f, 0.0f, 0.0f));
 		node1->attachObject(entity1);
 
+		SceneNode* pivotNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("Pivot", Vector3(0, 0, 0));
+
 		Entity* entity2 = mSceneMgr->createEntity("fish", "fish.mesh");
-		SceneNode* node2 = node1->createChildSceneNode("fish", Vector3(100.0f, 0.0f, 0.0f));
+		SceneNode* node2 = pivotNode->createChildSceneNode("fish", Vector3(100.0f, 0.0f, 0.0f));
+		node2->yaw(Degree(90.0f));
 		node2->attachObject(entity2);
-		mSceneMgr->getSceneNode("fish")->setScale(10, 10, 10);
+		node2->scale(10, 10, 10);
+		//mSceneMgr->getSceneNode("fish")->setScale(10, 10, 10);
 
 		mESCListener = new ESCListener(mKeyboard);
 		mRoot->addFrameListener(mESCListener);
