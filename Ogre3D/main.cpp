@@ -6,8 +6,6 @@
 #include <Ogre.h>
 #include <OIS/OIS.h>
 
-
-
 using namespace Ogre;
 
 class ESCListener : public FrameListener {
@@ -47,7 +45,6 @@ public:
 #else
     mRoot = new Root("plugins_d.cfg", "ogre.cfg", "ogre.log");
 #endif
-
 
     // 초기 시작의 컨피규레이션 설정 - ogre.cfg 이용
     if (!mRoot->restoreConfig()) {
