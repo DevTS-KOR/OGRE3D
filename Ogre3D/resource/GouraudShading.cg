@@ -1,0 +1,49 @@
+void main_vp(   float4 position  : POSITION,
+                    float3 normal    : NORMAL,
+
+                    out float4 oPosition : POSITION,
+                    out float4 color     : COLOR,
+                    
+                    uniform float4x4 worldViewProj,
+                    uniform float4 globalAmbient,
+                    uniform float4 lightDiffuseColor,
+                    uniform float4 lightSpecularColor,
+                    uniform float3 lightPosition,
+                    uniform float3 eyePosition,
+                    uniform float4 Ke,
+                    uniform float4 Ka,
+                    uniform float4 Kd,
+                    uniform float4 Ks,
+                    uniform float  shininess)
+{ 
+    oPosition = mul(worldViewProj, position);
+
+    float3 P = position.xyz;
+    float3 N = normal;
+
+    // Compute emissive term
+    float4 emissive = Ke;
+
+    // Compute ambient term
+    float4 ambient = Ka * globalAmbient;
+
+    // Compute the diffuse term
+    float3 L = normalize(lightPosition - P);
+    float diffuseLight = max(dot(N, L), 0);
+    float4 diffuse = Kd * lightDiffuseColor * diffuseLight;
+
+    // Compute the specular term
+    float3 V = normalize(eyePosition - P);
+    float3 H = normalize(L + V);
+    float specularLight = pow(max(dot(N, H), 0), shininess);
+    if (diffuseLight <= 0) specularLight = 0;
+    float4 specular = Ks * lightSpecularColor * specularLight;
+
+    color = emissive + ambient + diffuse + specular;
+}
+
+void main_fp(    float4 color : COLOR,
+                    out float4 oColor : COLOR)
+{
+    oColor = color;
+}

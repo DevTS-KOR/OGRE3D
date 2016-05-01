@@ -1,0 +1,44 @@
+material Map
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+                                filtering none
+				texture Map.gif
+			}
+		}
+	}
+}
+
+material KPU_LOGO2
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture main.gif
+			}
+		}
+	}
+}
+
+material PLAY
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture main.gif
+			}
+		}
+	}
+}
+
+

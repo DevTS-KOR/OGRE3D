@@ -1,0 +1,98 @@
+// 
+// Lighting shader
+// Implementing basic lighting model using shader
+//
+
+vertex_program GouraudShadingVP cg
+{
+    source GouraudShading.cg
+    entry_point main_vp
+    profiles vs_1_1 arbvp1
+    
+    default_params
+    {
+        param_named_auto worldViewProj worldviewproj_matrix
+        param_named_auto globalAmbient ambient_light_colour
+        param_named_auto lightDiffuseColor light_diffuse_colour 0
+        param_named_auto lightSpecularColor light_specular_colour 0
+        param_named_auto lightPosition light_position_object_space 0
+        param_named_auto eyePosition camera_position_object_space
+        
+// 크롬 
+        param_named Ke float4 0.0 0.0 0.0 0.0
+        param_named Ka float4 0.25 0.25 0.25 1
+        param_named Kd float4 0.4 0.4 0.4 1
+        param_named Ks float4 0.774597 0.774597 0.774597 1
+		param_named shininess float 76.8
+       
+// 금 
+//        param_named Ke float3 0.0 0.0 0.0
+//        param_named Ka float3 0.24725 0.1995 0.0745
+//        param_named Kd float3 0.75164 0.60648 0.22648
+//        param_named Ks float3 0.628281 0.555802 0.366065
+//        param_named shininess float 51.2  
+      
+// 잘 닦은 금  
+//        param_named Ke float4 0.0 0.0 0.0 0.0
+//        param_named Ka float4 0.24725 0.2245 0.0645 1
+//        param_named Kd float4 0.34615 0.3143 0.093 1
+//        param_named Ks float4 0.797357 0.723991 0.208006 1         
+//        param_named shininess float 83.2
+
+
+// 루비       
+//        param_named Ke float4 0.0 0.0 0.0 0.0
+//        param_named Ka float4 0.1745 0.01175 0.01175 0.55
+//        param_named Kd float4 0.61424 0.04136 0.04136 0.55
+//        param_named Ks float4 0.727811 0.626959 0.626959 0.55        
+//        param_named shininess float 76.8  
+    }
+}
+
+fragment_program GouraudShadingFP cg
+{
+    source GouraudShading.cg
+    entry_point main_fp
+    profiles ps_1_1 arbfp1
+}
+  
+material GouraudShading 
+{
+    technique  
+    {     
+        pass
+        {
+            fragment_program_ref GouraudShadingFP
+            {
+            }
+            vertex_program_ref GouraudShadingVP
+            {
+            }
+            texture_unit
+            {
+				texture nskingr.jpg
+            }
+        }
+    }
+}
+
+material Sinbad/BodyShader2 
+{
+    technique  
+    {     
+        pass
+        {
+            fragment_program_ref GouraudShadingFP
+            {
+            }
+            vertex_program_ref GouraudShadingVP
+            {
+            }
+            texture_unit
+            {
+				texture sinbad_body.tga
+            }
+        }
+    }
+}
+

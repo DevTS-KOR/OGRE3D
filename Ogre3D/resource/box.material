@@ -1,0 +1,138 @@
+material 01-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box0.png
+			}
+		}
+
+	}
+
+}
+
+material 02-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box1.png
+			}
+		}
+
+	}
+
+}
+
+material 03-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box2.png
+			}
+		}
+
+	}
+
+}
+
+material 07-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box3.png
+			}
+		}
+
+	}
+
+}
+
+material 08-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box4.png
+			}
+		}
+
+	}
+
+}
+material 09-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box5.png
+			}
+		}
+
+	}
+
+}
+
+material 13-Default
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture box6.png
+			}
+		}
+
+	}
+
+}

@@ -493,7 +493,7 @@ public:
 		mCamera = mSceneMgr->createCamera("main");
 
 
-		mCamera->setPosition(0.0f, 300.0f, 1000.0f);
+		mCamera->setPosition(0.0f, 200.0f, 900.0f);
 		mCamera->lookAt(0.0f, 100.0f, 0.0f);
 
 		mViewport = mWindow->addViewport(mCamera);
@@ -512,7 +512,7 @@ public:
 		mSceneMgr->getSceneNode("AxesNode")->setScale(5, 5, 5);
 
 		_drawGridPlane();
-
+		_drawGroundPlane();
 
 		Entity* entity1 = mSceneMgr->createEntity("Ogre", "Sinbad.mesh");
 		SceneNode* node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("Ogre", Vector3(0.0f, 100.0f, 600.0f));
@@ -589,6 +589,25 @@ private:
 		gridPlane->end();
 
 		gridPlaneNode->attachObject(gridPlane);
+	}
+
+	void _drawGroundPlane(void)
+	{
+		Plane plane(Vector3::UNIT_Y, 0);
+		MeshManager::getSingleton().createPlane(
+			"Ground",
+			ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+			plane,
+			1000, 1000,
+			1, 1,
+			false, 1, 1, 1,
+			Vector3::NEGATIVE_UNIT_Z
+			);
+
+		Entity* groundEntity = mSceneMgr->createEntity("GroundPlane", "Ground");
+		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
+		groundEntity->setMaterialName("Map");
+		groundEntity->setCastShadows(false);
 	}
 };
 
