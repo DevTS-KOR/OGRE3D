@@ -507,7 +507,7 @@ public:
 		mSceneMgr->setAmbientLight(ColourValue(1.0f, 1.0f, 1.0f));
 
 		// ÁÂÇ¥Ãà Ç¥½Ã
-		Ogre::Entity* mAxesEntity = mSceneMgr->createEntity("Axes", "axes.mesh");
+		Ogre::Entity* mAxesEntity = mSceneMgr->createEntity("Axes", "wooden.mesh");
 		mSceneMgr->getRootSceneNode()->createChildSceneNode("AxesNode", Ogre::Vector3(0, 0, 0))->attachObject(mAxesEntity);
 		mSceneMgr->getSceneNode("AxesNode")->setScale(5, 5, 5);
 
