@@ -255,7 +255,11 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="OptionState.h" />
     <ClInclude Include="PlayState.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TitleState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameFramework.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

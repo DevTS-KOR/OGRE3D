@@ -7,7 +7,7 @@ Overlay/Information
         metrics_mode pixels
         vert_align bottom
         horz_align left
-        left 5 
+        left 5
         top -80
         width 160
         height 75

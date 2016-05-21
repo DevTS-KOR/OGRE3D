@@ -46,6 +46,7 @@ private:
   Ogre::SceneNode* mCameraPitch;
 
   Ogre::Entity* mCharacterEntity;
+  Ogre::Entity*	mGround;
 
   Ogre::AnimationState* mAnimationState;
 

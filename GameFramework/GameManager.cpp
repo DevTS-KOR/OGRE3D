@@ -36,7 +36,7 @@ void GameManager::init(void)
     if (!mRoot->showConfigDialog()) return;
   }
 
-  mWindow = mRoot->initialise(true, CLIENT_DESCRIPTION " : Copyleft by Dae-Hyun Lee");
+  mWindow = mRoot->initialise(true, CLIENT_DESCRIPTION " : Music Run!");
 
   mSceneMgr = mRoot->createSceneManager(ST_GENERIC, "main");
 

@@ -24,11 +24,12 @@ void PlayState::enter(void)
   mInformationOverlay->show(); 
 
   mCharacterRoot = mSceneMgr->getRootSceneNode()->createChildSceneNode("ProfessorRoot");
+  mSceneMgr->getSceneNode("ProfessorRoot")->setPosition(0, 0, -300);
   mCharacterYaw = mCharacterRoot->createChildSceneNode("ProfessorYaw");
 
-  mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 120.0f, 0.0f));
+  mCameraYaw = mCharacterRoot->createChildSceneNode("CameraYaw", Vector3(0.0f, 200.0f, 0.0f));
   mCameraPitch = mCameraYaw->createChildSceneNode("CameraPitch");
-  mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 80.0f, 500.0f));
+  mCameraHolder = mCameraPitch->createChildSceneNode("CameraHolder", Vector3(0.0f, 80.0f, -5050.0f));
 
   mCharacterEntity = mSceneMgr->createEntity("Professor", "DustinBody.mesh");
   mCharacterYaw->attachObject(mCharacterEntity);
@@ -123,10 +124,10 @@ bool PlayState::mouseReleased(GameManager* game, const OIS::MouseEvent &e, OIS::
 
 bool PlayState::mouseMoved(GameManager* game, const OIS::MouseEvent &e)
 { 
-  mCameraYaw->yaw(Degree(-e.state.X.rel));
+  /*mCameraYaw->yaw(Degree(-e.state.X.rel));
   mCameraPitch->pitch(Degree(-e.state.Y.rel));
 
-  mCameraHolder->translate(Ogre::Vector3(0, 0, -e.state.Z.rel * 0.1f));
+  mCameraHolder->translate(Ogre::Vector3(0, 0, -e.state.Z.rel * 0.1f));*/
   return true;
 }
 
@@ -152,13 +153,14 @@ void PlayState::_drawGroundPlane(void)
     plane,
     500,500,
     1,1,
-    true,1,5,5,
+    true,1,1,1,
     Vector3::NEGATIVE_UNIT_Z
     );
 
   Entity* groundEntity = mSceneMgr->createEntity("GroundPlane", "Ground" );
-  mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(groundEntity);
-  groundEntity->setMaterialName("KPU_LOGO");
+  mSceneMgr->getRootSceneNode()->createChildSceneNode("GroundNode", Ogre::Vector3(0, 0, 0))->attachObject(groundEntity);
+  mSceneMgr->getSceneNode("GroundNode")->setScale(3, 1, 3);
+  groundEntity->setMaterialName("Map");
   groundEntity->setCastShadows(false);
 }
 
@@ -179,17 +181,17 @@ void PlayState::_drawGridPlane(void)
   gridPlaneMaterial->getTechnique(0)->getPass(0)->setAmbient(1,1,1); 
   gridPlaneMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(1,1,1); 
 
-  gridPlane->begin("GridPlaneMaterial", Ogre::RenderOperation::OT_LINE_LIST); 
-  for(int i=0; i<21; i++)
+  gridPlane->begin("GridPlaneMaterial", Ogre::RenderOperation::OT_LINE_LIST);
+  for (int i = 0; i < 21; i++)
   {
-    gridPlane->position(-500.0f, 0.0f, 500.0f-i*50);
-    gridPlane->position(500.0f, 0.0f, 500.0f-i*50);
+	  gridPlane->position(-500.0f, 0.0f, 500.0f - i * 50);
+	  gridPlane->position(500.0f, 0.0f, 500.0f - i * 50);
 
-    gridPlane->position(-500.f+i*50, 0.f, 500.0f);
-    gridPlane->position(-500.f+i*50, 0.f, -500.f);
+	  gridPlane->position(-500.f + i * 50, 0.f, 500.0f);
+	  gridPlane->position(-500.f + i * 50, 0.f, -500.f);
   }
 
-  gridPlane->end(); 
+  gridPlane->end();
 
   gridPlaneNode->attachObject(gridPlane);
 }

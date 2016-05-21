@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="DefaultWindow" Name="LectureTitle" >
+        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property Name="MousePassThroughEnabled" Value="True" />
+        <Window Type="GuiLook/StaticImage" Name="LogoImage" >
+            <Property Name="Image" Value="set:LectureTitle image:KPU_LOGO" />
+            <Property Name="FrameEnabled" Value="True" />
+            <Property Name="HorzFormatting" Value="CentreAligned" />
+            <Property Name="VertFormatting" Value="CentreAligned" />
+            <Property Name="UnifiedAreaRect" Value="{{0.388475,0},{0.0333347,0},{0.584764,0},{0.334226,0}}" />
+        </Window>
+        <Window Type="GuiLook/StandardButton" Name="StartGameButton" >
+            <Property Name="Font" Value="NanumBold" />
+            <Property Name="Text" Value="계속 하기" />
+            <Property Name="onClick" Value="guiNewGame" />
+            <Property Name="UnifiedAreaRect" Value="{{0.374023,0},{1,-401},{0.454882,147},{1,-357}}" />
+        </Window>
+        <Window Type="GuiLook/StandardButton" Name="SaveButton" >
+            <Property Name="Font" Value="NanumBold" />
+            <Property Name="Text" Value="저장 및 종료" />
+            <Property Name="UnifiedAreaRect" Value="{{0.373047,0},{1,-339},{0.454882,147},{1,-295}}" />
+        </Window>
+        <Window Type="GuiLook/StaticText" Name="Score" >
+            <Property Name="Font" Value="NanumBold" />
+            <Property Name="UnifiedAreaRect" Value="{{0.858398,0},{0.00254448,0},{0.998047,0},{0.0515269,0}}" />
+            <Property Name="WantsMultiClickEvents" Value="False" />
+        </Window>
+    </Window>
+</GUILayout>

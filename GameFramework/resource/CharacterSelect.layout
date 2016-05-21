@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout >
+    <Window Type="DefaultWindow" Name="CharacterSelect" >
+        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,1023},{1,767}}" />
+        <Property Name="MousePassThroughEnabled" Value="True" />
+        <Window Type="GuiLook/StaticTextOutline" Name="Layout Title" >
+            <Property Name="Font" Value="SerifHuge" />
+            <Property Name="Text" Value="CHARACTER SELECT" />
+            <Property Name="AlwaysOnTop" Value="True" />
+            <Property Name="UnifiedAreaRect" Value="{{0.5,-307},{0,75},{0.5,304},{0,118}}" />
+            <Property Name="HorzTextFormatting" Value="CentreAligned" />
+            <Property Name="WantsMultiClickEvents" Value="False" />
+            <Property Name="MousePassThroughEnabled" Value="True" />
+        </Window>
+        <Window Type="GuiLook/StandardButton" Name="BackButton" >
+            <Property Name="Font" Value="NanumBold" />
+            <Property Name="Text" Value="이전 화면" />
+            <Property Name="onClick" Value="guiBack" />
+            <Property Name="UnifiedAreaRect" Value="{{0.742187,0},{1,-71},{0.5,494},{1,-27}}" />
+        </Window>
+        <Window Type="GuiLook/StaticImage" Name="ProfessorIcon" >
+            <Property Name="Image" Value="set:CharacterIcons image:Professor" />
+            <Property Name="AlwaysOnTop" Value="True" />
+            <Property Name="FrameEnabled" Value="True" />
+            <Property Name="HorzFormatting" Value="CentreAligned" />
+            <Property Name="VertFormatting" Value="CentreAligned" />
+            <Property Name="UnifiedAreaRect" Value="{{0.141602,0},{0.259566,0},{0.209961,0},{0.39379,0}}" />
+        </Window>
+        <Window Type="GuiLook/StaticImage" Name="NinjaIcon" >
+            <Property Name="Image" Value="set:CharacterIcons image:Ninja" />
+            <Property Name="AlwaysOnTop" Value="True" />
+            <Property Name="FrameEnabled" Value="True" />
+            <Property Name="HorzFormatting" Value="CentreAligned" />
+            <Property Name="VertFormatting" Value="CentreAligned" />
+            <Property Name="UnifiedAreaRect" Value="{{0.141602,0},{0.496513,0},{0.209961,0},{0.630737,0}}" />
+        </Window>
+    </Window>
+</GUILayout>

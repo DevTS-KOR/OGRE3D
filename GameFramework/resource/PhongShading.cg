@@ -1,0 +1,117 @@
+void PhongShadingMainVP(   
+					float4 position  : POSITION,
+                    float3 normal    : NORMAL,
+                                        
+                    out float4 oPosition : POSITION,
+                    out float3 oObjectPos : TEXCOORD0,
+                    out float3 oNormal : TEXCOORD1,
+                    
+                    uniform float4x4 worldViewProj)
+{
+    oPosition = mul(worldViewProj, position);
+    oObjectPos = position.xyz;
+    oNormal = normal;
+}
+
+
+void PhongShadingMainFP(    
+					float3 position  : TEXCOORD0,
+                    float3 normal    : TEXCOORD1,
+
+                    out float4 color     : COLOR,
+                    
+                    uniform float4 globalAmbient,
+                    uniform float4 lightDiffuseColor,
+                    uniform float4 lightSpecularColor,
+                    uniform float3 lightPosition,
+                    uniform float3 eyePosition,
+
+                    uniform float4 Ke,
+                    uniform float4 Ka,
+                    uniform float4 Kd,
+                    uniform float4 Ks,
+ 
+                    uniform float  shininess)
+{
+    float3 P = position;
+    float3 N = normalize(normal);
+
+	float4 emissive = Ke;
+	
+    // Compute ambient term
+    float4 ambient = Ka * globalAmbient;
+
+    // Compute the diffuse term
+    float3 L = normalize(lightPosition - P);
+    float diffuseLight = max(dot(N, L), 0);
+    float4 diffuse = Kd * lightDiffuseColor * diffuseLight;
+
+    // Compute the specular term
+    float3 V = normalize(eyePosition - P);
+    float3 H = normalize(L + V);
+    float specularLight = pow(max(dot(N, H), 0), shininess);
+    if (diffuseLight <= 0) specularLight = 0;
+    float4 specular = Ks * lightSpecularColor * specularLight;
+    
+    color = emissive + ambient + diffuse + specular;
+}
+
+
+
+void PhongShadingDecalMainVP(
+					float4 position  : POSITION,
+                    float3 normal    : NORMAL,
+					float2 texCoord : TEXCOORD0, 
+                                        
+                    out float4 oPosition : POSITION,
+                    out float3 oObjectPos : TEXCOORD0,
+                    out float3 oNormal : TEXCOORD1,
+                    out float2 oTexCoord : TEXCOORD2,
+
+                    
+                    uniform float4x4 worldViewProj)
+{
+    oPosition = mul(worldViewProj, position);
+    oObjectPos = position.xyz;
+    oNormal = normal;
+    oTexCoord = texCoord;
+}
+
+
+void PhongShadingDecalMainFP(    
+					float3 position  : TEXCOORD0,
+                    float3 normal    : TEXCOORD1,
+					float2 texCoord : TEXCOORD2, 
+
+                    out float4 color     : COLOR,
+                    
+                    uniform float4 globalAmbient,
+                    uniform float4 lightDiffuseColor,
+                    uniform float4 lightSpecularColor,
+                    uniform float3 lightPosition,
+                    uniform float3 eyePosition,
+
+                    uniform float  shininess,
+					uniform sampler2D ninjaTexture)
+{
+    float3 P = position;
+    float3 N = normalize(normal);
+    
+    // Compute ambient term
+    float4 ambient = globalAmbient;
+
+    // Compute the diffuse term
+    float3 L = normalize(lightPosition - P);
+    float diffuseLight = max(dot(N, L), 0);
+    float4 diffuse = lightDiffuseColor * diffuseLight;
+
+    // Compute the specular term
+    float3 V = normalize(eyePosition - P);
+    float3 H = normalize(L + V);
+    float specularLight = pow(max(dot(N, H), 0), shininess);
+    if (diffuseLight <= 0) specularLight = 0;
+    float4 specular = lightSpecularColor * specularLight;
+    
+    color = (ambient + diffuse + specular) * tex2D(ninjaTexture, texCoord);
+}
+
