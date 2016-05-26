@@ -4,6 +4,7 @@
 
 class PlayState : public GameState
 {
+
 public:
   void enter(void);
   void exit(void);
@@ -24,11 +25,11 @@ public:
   static PlayState* getInstance() { return &mPlayState; }
 
 private:
-
   void _setLights(void);
   void _drawGroundPlane(void);
   void _drawGridPlane(void);
-
+  void _drawScene(void);
+  void _controlCharacter(const Ogre::FrameEvent& evt);
 
   static PlayState mPlayState;
 
@@ -41,12 +42,17 @@ private:
 
   Ogre::SceneNode* mCharacterRoot;
   Ogre::SceneNode* mCharacterYaw;
+  //Ogre::SceneNode* mCamera;
+  Ogre::Vector3 mCharacterDirection;
+  Ogre::SceneNode** mGroundNode;
+  Ogre::SceneNode* mCameraRoot;
   Ogre::SceneNode* mCameraHolder;
   Ogre::SceneNode* mCameraYaw;
   Ogre::SceneNode* mCameraPitch;
 
   Ogre::Entity* mCharacterEntity;
   Ogre::Entity*	mGround;
+  Ogre::Entity** mGroundEntity;
 
   Ogre::AnimationState* mAnimationState;
 
