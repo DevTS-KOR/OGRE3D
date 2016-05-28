@@ -1,0 +1,48 @@
+Overlay/Point
+{
+    zorder 100
+    // Stats block
+    container Panel(cotainer3)
+    {
+        metrics_mode pixels
+        vert_align top
+        horz_align right
+        left -200
+        top 0
+        width 300
+        height 100
+		//material Information
+
+    // Fill Here ---------------------------------
+    element TextArea(Point)
+    {
+		metrics_mode pixels
+		left -90
+		top 25
+		width 300
+		height 100
+		font_name Font/Magic36
+		char_height 68
+		caption Current Point
+		colour_top 0.936 0.680 0.066
+		colour_bottom 150 150 150
+	
+	 }
+	 ///////////////////////////////////////////////
+	element TextArea(GameTime)
+    {
+		metrics_mode pixels
+		left -400
+		top 25
+		width 300
+		height 100
+		font_name Font/Magic36
+		char_height 68
+		caption Current GameTime
+		colour_top 0.936 0.680 0.066
+		colour_bottom 150 150 150
+	
+	 }
+
+   }
+}

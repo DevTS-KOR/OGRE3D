@@ -2,7 +2,6 @@
 
 #include "GameManager.h"
 #include "GameState.h"
-
 using namespace Ogre;
 
 GameManager::GameManager()

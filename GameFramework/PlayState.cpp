@@ -1,8 +1,10 @@
 #include "PlayState.h"
 #include "TitleState.h"
 #include "OptionState.h"
-
+using namespace std;
 using namespace Ogre;
+
+
 static const float professorSpeed = 100.0f;
 PlayState PlayState::mPlayState;
 void PlayState::enter(void)
@@ -17,6 +19,9 @@ void PlayState::enter(void)
 	_setLights();
 	_drawGroundPlane();
 	_drawScene();
+	_inputFile();
+	_makeTestStagePattern();
+	_constructTestStageSceneNode();
 
 	mInformationOverlay = OverlayManager::getSingleton().getByName("Overlay/Information");
 	mInformationOverlay->show();
@@ -45,6 +50,10 @@ void PlayState::enter(void)
 	mAnimationState = mCharacterEntity->getAnimationState("Run");
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
+
+	// Sound
+	soundInit();
+	FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_Stage1], 0, &g_Channel[SD_Stage1]);
 }
 
 void PlayState::exit(void)
@@ -52,6 +61,7 @@ void PlayState::exit(void)
 	// Fill Here -----------------------------
 	mSceneMgr->clearScene();
 	mInformationOverlay->hide();
+	Release();
 	// ---------------------------------------
 }
 
@@ -65,6 +75,8 @@ void PlayState::resume(void)
 
 bool PlayState::frameStarted(GameManager* game, const FrameEvent& evt)
 {
+
+
 	mAnimationState->addTime(evt.timeSinceLastFrame);
 
 	mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 0.0, 800.0f * evt.timeSinceLastFrame);
@@ -262,4 +274,107 @@ void PlayState::_drawGridPlane(void)
 void PlayState::_controlCharacter(const Ogre::FrameEvent & evt)
 {
 
+}
+
+void PlayState::_inputFile(void)
+{
+	std::ifstream inFile;
+	inFile.open("stage1.txt");
+	std::string buf;
+
+	while (!inFile.eof())
+	{
+		std::getline(inFile, buf, '\n');
+		mInputFile.push_back(buf);
+	}
+	inFile.close();
+}
+
+void PlayState::_makeTestStagePattern(void)
+{
+	for (int i = 0; i<mInputFile.size(); ++i)
+	{
+		int temp = atoi(mInputFile[i].c_str());
+		int cnt = 0;
+		while (cnt<3)
+		{
+			int temp2 = temp % 10;
+			switch (temp2)
+			{
+			case 0:
+				break;
+				mCollisionCheck[i][cnt] = false;
+			case 1:
+				//0.25초당 한번씩(300은 1초당, 150은 0.5초당)
+				mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));		
+				mCollisionCheck[i][cnt] = true;
+				break;
+			}
+			//if(mCollisionCheck[i][cnt])
+			//	std::cout<<"true  ";
+			//else
+			//	std::cout<<"false ";
+			temp = temp / 10;
+			cnt++;
+		}
+		//std::cout<<i<<std::endl;
+	}
+}
+
+void PlayState::_constructTestStageSceneNode(void)
+{
+	
+#define COLLISION_MAX 200
+	SceneNode* mCollision = mSceneMgr->getRootSceneNode()->createChildSceneNode("CollisionNode");
+	SceneNode* collisionNode[COLLISION_MAX];
+	Entity* collisionEntity[COLLISION_MAX];
+	for (int i = 0; i<mPattern.size(); ++i)
+	{
+		char collisionName[20];
+		sprintf(collisionName, "CollisionEntity%d", i + 1);
+
+		collisionEntity[i] = mSceneMgr->createEntity(collisionName, "coin.mesh");
+		
+
+		sprintf(collisionName, "CollisionNode%d", i + 1);
+		collisionNode[i] = mCollision->createChildSceneNode(collisionName, mPattern[i]);
+		//mCollision->setScale(3, 3, 1);
+		collisionNode[i]->attachObject(collisionEntity[i]);
+		//collisionNode[i]->scale(2.0f, 2.0f, 2.0f);
+	}
+}
+
+
+void PlayState::soundInit()/*
+						   그냥 내가 만든 함수이니까 너네 마음대로 바꿔서 쓰면됨
+						   배경음은 CreateStream 으로 하는게 메모리를 덜 잡아먹는데 참고하시길.
+						   우리는 Sound파일을 다 SD_Opening.mp3 이런식으로 이름 다바꿔서 Sound폴더에서 관리해. 절대경로로. 그래서 저렇게 불러오면됨
+						   */
+{
+	
+	FMOD_System_Create(&g_System);
+	FMOD_System_Init(g_System, 10, FMOD_INIT_NORMAL, NULL);
+
+	//배경음
+	FMOD_System_CreateStream(g_System, "Sound/Sound1.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[SD_Stage1]);
+
+	// 형식은 :                g_system에, 경로, 재생 방식(계속 음악끝나면 반복), 사운드 설정 해주고
+
+	//효과음 
+
+	FMOD_System_CreateSound(g_System, "Sound/효과음.wav", FMOD_DEFAULT, 0, &g_Sound[SD_Effect]);
+
+}
+
+
+void PlayState::Release() //마지막으로 음악 다 재생 되면 이런식으로 릴리즈해줘야 해.
+{
+	for (int i = 0; i < SD_Effect; ++i)
+	{
+		FMOD_Sound_Release(g_Sound[i]);
+	}
+	/*FMOD_Sound_Release(g_Sound[0]);
+	FMOD_Sound_Release(g_Sound[1]);*/
+	FMOD_System_Close(g_System);
+	FMOD_System_Release(g_System);
 }

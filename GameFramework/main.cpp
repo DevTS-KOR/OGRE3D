@@ -10,7 +10,9 @@
 #include "GameManager.h"
 #include "TitleState.h"
 #include "PlayState.h"
-
+#include "inc/fmod.hpp"
+#pragma comment (lib,"fmodex_vc.lib")
+using namespace FMOD;
 using namespace Ogre;
 
 #ifdef __cplusplus
