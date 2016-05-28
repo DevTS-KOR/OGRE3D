@@ -1,0 +1,116 @@
+Overlay/Title
+{
+  	zorder 100
+	container Panel(TitleContainer)
+	{
+		container Panel(TitleLOGO)
+		{
+			metrics_mode relative
+			vert_align top
+			horz_align left
+			top 0
+			left 0
+			height 1
+			width 1
+			material KPU_LOGO2
+		}
+	}
+}
+
+Overlay/Menu1
+{
+  	zorder 100
+	container Panel(MenuContainer1)
+	{
+		container Panel(MenuLOGO1)
+		{
+			metrics_mode relative
+			vert_align top
+			horz_align left
+			top 0
+			left 0
+			height 1
+			width 1
+			material MENU_LOGO1
+		}
+	}
+}
+
+Overlay/Menu2
+{
+  	zorder 100
+	container Panel(MenuContainer2)
+	{
+		container Panel(MenuLOGO2)
+		{
+			metrics_mode relative
+			vert_align top
+			horz_align left
+			top 0
+			left 0
+			height 1
+			width 1
+			material MENU_LOGO2
+		}
+	}
+}
+
+Overlay/Menu3
+{
+  	zorder 100
+	container Panel(MenuContainer3)
+	{
+		container Panel(MenuLOGO3)
+		{
+			metrics_mode relative
+			vert_align top
+			horz_align left
+			top 0
+			left 0
+			height 1
+			width 1
+			material MENU_LOGO3
+		}
+	}
+}
+
+
+Overlay/GameOver
+{
+        zorder 100
+        // Stats block
+	container Panel(OverPanel)
+	{
+		container Panel(OverLOGO)
+		{
+			metrics_mode relative
+			vert_align top
+			horz_align left
+			top 0
+			left 0
+			height 1
+			width 1
+			material OVER_LOGO
+		}
+	}
+}
+
+Overlay/GameClear
+{
+        zorder 100
+        // Stats block
+	container Panel(ClearPanel)
+	{
+		container Panel(ClearLOGO)
+		{
+			metrics_mode relative
+			vert_align top
+			horz_align left
+			top 0
+			left 0
+			height 1
+			width 1
+			material CLEAR_LOGO
+		}
+	}
+}

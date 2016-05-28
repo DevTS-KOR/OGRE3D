@@ -195,7 +195,7 @@ void PlayState::_setLights(void)
 void PlayState::_drawGroundPlane(void)
 {
 	//할당할 바닥 갯수
-	int iGroundCount = 50;
+	int iGroundCount = 100;
 	//바닥을 위한 엔티티 & 씬노드 할당
 	mGroundEntity = (Entity**)malloc(sizeof(Entity*)* iGroundCount);
 	mGroundNode = (SceneNode**)malloc(sizeof(SceneNode*)* iGroundCount);
