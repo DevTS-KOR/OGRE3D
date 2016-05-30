@@ -1,5 +1,5 @@
 
-material Sky/SpaceSkyBox
+material Sky/PlaySkyBox
 {
 	technique
 	{
@@ -15,6 +15,63 @@ material Sky/SpaceSkyBox
 			}
 		}
 	}
+}
+
+material CLUB
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture club.gif
+			}
+		}
+	}
+}
+
+material 3D-Diggers/SkyBox
+{
+   technique
+   {
+      pass
+      {
+         fog_override true none
+         lighting off
+         depth_write off
+
+         texture_unit
+         {
+            cubic_texture club.gif club.gif club.gifg club.gif club.gif club.gif separateUV
+            tex_address_mode clamp
+         }
+      }
+   }
+}
+
+material 3D-Diggers/SkyBox1234
+{
+   technique
+   {
+      pass
+      {
+         fog_override true none
+         lighting off
+         depth_write off
+
+         texture_unit
+         {
+            cubic_texture LobyCube_FR.jpg 
+			LobyCube_BK.jpg 
+			LobyCube_LF.jpg 
+			LobyCube_RT.jpg 
+			LobyCube_UP.jpg 
+			LobyCube_DN.jpg  separateUV
+            tex_address_mode clamp
+         }
+      }
+   }
 }
 
 material Sky/CloudySky

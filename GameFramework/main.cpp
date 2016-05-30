@@ -10,6 +10,7 @@
 #include "GameManager.h"
 #include "TitleState.h"
 #include "PlayState.h"
+#include "LobyState.h"
 #include "inc/fmod.hpp"
 #pragma comment (lib,"fmodex_vc.lib")
 using namespace FMOD;
@@ -18,6 +19,7 @@ using namespace Ogre;
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
   INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )

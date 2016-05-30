@@ -203,8 +203,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="LobyState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OptionState.cpp" />
+    <ClCompile Include="Play2State.cpp" />
+    <ClCompile Include="Play3State.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="TitleState.cpp" />
   </ItemGroup>
@@ -258,7 +261,10 @@
   <ItemGroup>
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="LobyState.h" />
     <ClInclude Include="OptionState.h" />
+    <ClInclude Include="Play2State.h" />
+    <ClInclude Include="Play3State.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="TitleState.h" />

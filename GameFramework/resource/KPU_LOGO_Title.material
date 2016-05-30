@@ -1,0 +1,14 @@
+material KPU_LOGO
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture KPU_LOGO3.png
+			}
+		}
+	}
+}
+

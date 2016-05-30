@@ -11,8 +11,7 @@ using namespace FMOD;
 using namespace Ogre;
 
 enum SOUONDKIND {
-	SD_Stage1,
-	SD_Effect
+	SD_Stage1
 };
 
 class PlayState : public GameState
@@ -82,8 +81,8 @@ private:
 
   // 사운드  전역변수 3개를 선언해
   FMOD_SYSTEM *g_System; //사운드 시스템 생성 하는 부분이고
-  FMOD_SOUND *g_Sound[SD_Effect]; //사운드 설정하는부분
-  FMOD_CHANNEL *g_Channel[SD_Effect]; //채널 설정하는부분이고
+  FMOD_SOUND *g_Sound[1]; //사운드 설정하는부분
+  FMOD_CHANNEL *g_Channel[1]; //채널 설정하는부분이고
   FMOD_BOOL mIsPlaying;
 };
 

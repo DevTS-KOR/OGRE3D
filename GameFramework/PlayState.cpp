@@ -1,6 +1,8 @@
 #include "PlayState.h"
 #include "TitleState.h"
 #include "OptionState.h"
+#include "LobyState.h"
+
 using namespace std;
 using namespace Ogre;
 
@@ -75,8 +77,6 @@ void PlayState::resume(void)
 
 bool PlayState::frameStarted(GameManager* game, const FrameEvent& evt)
 {
-
-
 	mAnimationState->addTime(evt.timeSinceLastFrame);
 
 	mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 0.0, 800.0f * evt.timeSinceLastFrame);
@@ -144,6 +144,7 @@ bool PlayState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	switch (e.key)
 	{
 	case OIS::KC_ESCAPE:
+		Release();
 		game->changeState(TitleState::getInstance());
 		break;
 	case OIS::KC_UP:
@@ -259,7 +260,7 @@ void PlayState::_drawGroundPlane(void)
 
 void PlayState::_drawScene(void)
 {
-	mSceneMgr->setSkyBox(true, "Sky/SpaceSkyBox", 5000);
+	mSceneMgr->setSkyBox(true, "Sky/PlaySkyBox", 5000);
 }
 
 
@@ -360,16 +361,13 @@ void PlayState::soundInit()/*
 
 	// 형식은 :                g_system에, 경로, 재생 방식(계속 음악끝나면 반복), 사운드 설정 해주고
 
-	//효과음 
-
-	FMOD_System_CreateSound(g_System, "Sound/효과음.wav", FMOD_DEFAULT, 0, &g_Sound[SD_Effect]);
 
 }
 
 
 void PlayState::Release() //마지막으로 음악 다 재생 되면 이런식으로 릴리즈해줘야 해.
 {
-	for (int i = 0; i < SD_Effect; ++i)
+	for (int i = 0; i < SD_Stage1; ++i)
 	{
 		FMOD_Sound_Release(g_Sound[i]);
 	}

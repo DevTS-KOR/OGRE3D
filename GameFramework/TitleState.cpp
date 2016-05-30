@@ -1,5 +1,6 @@
 #include "TitleState.h"
 #include "PlayState.h"
+#include "LobyState.h"
 
 using namespace Ogre;
 
@@ -9,6 +10,7 @@ void TitleState::enter(void)
 {
   mContinue = true;
   mTitleOverlay = OverlayManager::getSingleton().getByName("Overlay/Title");
+  mTitleOverlay->setScale(3.4f, 3.2f);
   mStartMsg = OverlayManager::getSingleton().getOverlayElement("StartMsg");
   mTitleOverlay->show();
   mStartMsg->show();
@@ -58,7 +60,8 @@ bool TitleState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	switch (e.key)
 	{
 	case OIS::KC_SPACE:
-		game->changeState(PlayState::getInstance());
+		//game->changeState(PlayState::getInstance());
+		game->changeState(LobyState::getInstance());
 		break;
 	case OIS::KC_ESCAPE:
 		mContinue = false;
