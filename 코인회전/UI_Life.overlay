@@ -1,0 +1,175 @@
+Overlay/UI_Life10
+{
+    zorder 100
+	container Panel(UILifePanel10)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life10
+	}
+}
+
+Overlay/UI_Life9
+{
+    zorder 100
+	container Panel(UILifePanel9)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life9
+	}
+}
+
+Overlay/UI_Life8
+{
+    zorder 100
+	container Panel(UILifePanel8)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life8
+	}
+}
+
+Overlay/UI_Life7
+{
+    zorder 100
+	container Panel(UILifePanel7)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life7
+	}
+}
+
+Overlay/UI_Life6
+{
+    zorder 100
+	container Panel(UILifePanel6)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life6
+	}
+}
+
+Overlay/UI_Life5
+{
+    zorder 100
+	container Panel(UILifePanel5)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life5
+	}
+}
+
+Overlay/UI_Life4
+{
+    zorder 100
+	container Panel(UILifePanel4)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life4
+	}
+}
+
+Overlay/UI_Life3
+{
+    zorder 100
+	container Panel(UILifePanel3)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life3
+	}
+}
+
+Overlay/UI_Life2
+{
+    zorder 100
+	container Panel(UILifePanel2)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life2
+	}
+}
+
+Overlay/UI_Life1
+{
+    zorder 100
+	container Panel(UILifePanel1)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life1
+	}
+}
+
+Overlay/UI_Life0
+{
+    zorder 100
+	container Panel(UILifePanel0)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -770
+		width 90
+		height 90
+		material UI/Life0
+	}
+}

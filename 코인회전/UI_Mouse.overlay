@@ -1,0 +1,15 @@
+Overlay/Cursor
+{
+    zorder 650
+	container Panel(UI_Mouse)
+	{
+		  metrics_mode pixels
+		  vert_align center
+		  horz_align center
+		  top 0
+		  left 0
+		  height 35
+		  width 35
+		  material UI/Mouse
+   }
+}

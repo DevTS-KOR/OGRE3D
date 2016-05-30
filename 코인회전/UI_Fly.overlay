@@ -1,0 +1,175 @@
+Overlay/UI_Fly10
+{
+    zorder 100
+	container Panel(UIFlyPanel10)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly10
+	}
+}
+
+Overlay/UI_Fly9
+{
+    zorder 100
+	container Panel(UIFlyPanel9)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly9
+	}
+}
+
+Overlay/UI_Fly8
+{
+    zorder 100
+	container Panel(UIFlyPanel8)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly8
+	}
+}
+
+Overlay/UI_Fly7
+{
+    zorder 100
+	container Panel(UIFlyPanel7)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly7
+	}
+}
+
+Overlay/UI_Fly6
+{
+    zorder 100
+	container Panel(UIFlyPanel6)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly6
+	}
+}
+
+Overlay/UI_Fly5
+{
+    zorder 100
+	container Panel(UIFlyPanel5)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly5
+	}
+}
+
+Overlay/UI_Fly4
+{
+    zorder 100
+	container Panel(UIFlyPanel4)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly4
+	}
+}
+
+Overlay/UI_Fly3
+{
+    zorder 100
+	container Panel(UIFlyPanel3)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly3
+	}
+}
+
+Overlay/UI_Fly2
+{
+    zorder 100
+	container Panel(UIFlyPanel2)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly2
+	}
+}
+
+Overlay/UI_Fly1
+{
+    zorder 100
+	container Panel(UIFlyPanel1)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly1
+	}
+}
+
+Overlay/UI_Fly0
+{
+    zorder 100
+	container Panel(UIFlyPanel0)
+	{
+		metrics_mode pixels
+		horz_align right
+		vert_align top
+		top 10
+		left -650
+		width 90
+		height 90
+		material UI/Fly0
+	}
+}
