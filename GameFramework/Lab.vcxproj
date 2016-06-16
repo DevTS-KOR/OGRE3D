@@ -86,8 +86,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>c:\bin\$(Configuration)\</OutDir>
     <IntDir>c:\bin\int\$(Configuration)\</IntDir>
-    <LibraryPath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\Programming\Game Engine Code Real\Project\OGRE3D\GameFramework\inc;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;C:\Programming\Game Engine Code Real\Project\OGRE3D\GameFramework\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Program Files\Fmod\FMOD Programmers API Windows\api\lib;C:\Programming\Game Engine Code Real\Project\OGRE3D\GameFramework\inc;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Program Files\Fmod\FMOD Programmers API Windows\api\inc;C:\Programming\Game Engine Code Real\Project\OGRE3D\GameFramework\inc;$(IncludePath)</IncludePath>
     <ExecutablePath>C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
