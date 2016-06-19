@@ -9,6 +9,7 @@ using namespace FMOD;
 #include <iostream>
 
 using namespace Ogre;
+#define COLLISION_MAX 1000
 
 enum SOUONDKIND {
 	SD_Stage1
@@ -38,6 +39,7 @@ public:
   void soundInit();
   void Release();
 
+  SceneNode* collisionNode[COLLISION_MAX];
 private:
   void _setLights(void);
   void _drawGroundPlane(void);
@@ -47,12 +49,16 @@ private:
   void _makeTestStagePattern(void);
   void _constructTestStageSceneNode(void);
   void _controlCharacter(const Ogre::FrameEvent& evt);
-
+  void _crush();
+  void _setOverlay();
 
   static PlayState mPlayState;
   std::vector<std::string> mInputFile;
   std::vector<Ogre::Vector3> mPattern;
   bool mCollisionCheck[90][7];
+
+
+  int CoinCount;
 
   Ogre::Root *mRoot;
   Ogre::RenderWindow* mWindow;
@@ -78,6 +84,8 @@ private:
   Ogre::AnimationState* mAnimationState;
 
   Ogre::Overlay*           mInformationOverlay;
+
+  //Ogre::Overlay*           mInformationOverlay2;
 
   // 사운드  전역변수 3개를 선언해
   FMOD_SYSTEM *g_System; //사운드 시스템 생성 하는 부분이고

@@ -65,6 +65,20 @@ Overlay/Information
             colour_top 0.7 0.7 0.7
             colour_bottom 0.7 0.7 0.7
         }
+
+		 element TextArea(CoinCount)
+        {
+            metrics_mode pixels
+            left 500
+            top 500
+            width 90
+            height 30
+            font_name Font/NanumBold18
+            char_height 18
+            caption BEST FPS:
+            colour_top 0.7 0.7 0.7
+            colour_bottom 0.7 0.7 0.7
+        }
     }
 
 

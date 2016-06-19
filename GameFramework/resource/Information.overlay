@@ -65,5 +65,31 @@ Overlay/Information
             colour_top 0.7 0.7 0.7
             colour_bottom 0.7 0.7 0.7
         }
-    }
+ 	
+}
+ 	container BorderPanel(DebugPanel2)
+       {
+        metrics_mode pixels
+        vert_align bottom
+        horz_align left
+        left 50 
+        top 100
+        width 160
+        height 75
+	material Information
+
+	element TextArea(CoinCount)
+        {
+            metrics_mode pixels
+            left 5
+            top 50
+            width 90
+            height 30
+            font_name Font/NanumBold18
+            char_height 18
+            caption Coin Count:
+            colour_top 0.7 0.7 0.7
+            colour_bottom 0.7 0.7 0.7
+       	 }
+	}
 }

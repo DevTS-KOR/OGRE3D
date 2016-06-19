@@ -23,10 +23,12 @@ void PlayState::enter(void)
 	_drawScene();
 	_inputFile();
 	_makeTestStagePattern();
-	_constructTestStageSceneNode();
 
 	mInformationOverlay = OverlayManager::getSingleton().getByName("Overlay/Information");
 	mInformationOverlay->show();
+
+	//mInformationOverlay2 = OverlayManager::getSingleton().getByName("Overlay/Information2");
+	//mInformationOverlay2->show();
 
 	mCharacterRoot = mSceneMgr->getRootSceneNode()->createChildSceneNode("ProfessorRoot");
 	mSceneMgr->getSceneNode("ProfessorRoot")->setPosition(0, 0, -300);
@@ -49,10 +51,17 @@ void PlayState::enter(void)
 	mCamera->setFarClipDistance(500);
 	mCameraHolder->attachObject(mCamera);
 
+	//mOverlaySystem = new Ogre::OverlaySystem();
+	//mSceneMgr->addRenderQueueListener(mOverlaySystem);
+
+
 	mAnimationState = mCharacterEntity->getAnimationState("Run");
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
 
+	_constructTestStageSceneNode();
+
+	CoinCount = 0;
 	// Sound
 	soundInit();
 	FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_Stage1], 0, &g_Channel[SD_Stage1]);
@@ -63,6 +72,7 @@ void PlayState::exit(void)
 	// Fill Here -----------------------------
 	mSceneMgr->clearScene();
 	mInformationOverlay->hide();
+	//mInformationOverlay2->hide();
 	Release();
 	// ---------------------------------------
 }
@@ -82,6 +92,7 @@ bool PlayState::frameStarted(GameManager* game, const FrameEvent& evt)
 	mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 0.0, 800.0f * evt.timeSinceLastFrame);
 	//mCameraHolder->translate(0.0f, 0.0f, 10.0f * evt.timeSinceLastFrame);
 	_controlCharacter(evt);
+	_crush();
 	return true;
 }
 
@@ -91,11 +102,13 @@ bool PlayState::frameEnded(GameManager* game, const FrameEvent& evt)
 	static Ogre::DisplayString avgFps = L"Æò±Õ FPS: ";
 	static Ogre::DisplayString bestFps = L"ÃÖ°í FPS: ";
 	static Ogre::DisplayString worstFps = L"ÃÖÀú FPS: ";
+	static Ogre::DisplayString Coin = L"ÄÚÀÎ ½Àµæ : ";
 
 	OverlayElement* guiAvg = OverlayManager::getSingleton().getOverlayElement("AverageFps");
 	OverlayElement* guiCurr = OverlayManager::getSingleton().getOverlayElement("CurrFps");
 	OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("BestFps");
 	OverlayElement* guiWorst = OverlayManager::getSingleton().getOverlayElement("WorstFps");
+	OverlayElement* guiCoint = OverlayManager::getSingleton().getOverlayElement("CoinCount");
 
 	const RenderTarget::FrameStats& stats = mRoot->getAutoCreatedWindow()->getStatistics();
 
@@ -103,6 +116,7 @@ bool PlayState::frameEnded(GameManager* game, const FrameEvent& evt)
 	guiCurr->setCaption(currFps + StringConverter::toString(stats.lastFPS));
 	guiBest->setCaption(bestFps + StringConverter::toString(stats.bestFPS));
 	guiWorst->setCaption(worstFps + StringConverter::toString(stats.worstFPS));
+	guiCoint->setCaption(Coin + StringConverter::toString(stats.coinFPS));
 
 	return true;
 }
@@ -324,10 +338,8 @@ void PlayState::_makeTestStagePattern(void)
 
 void PlayState::_constructTestStageSceneNode(void)
 {
-	
-#define COLLISION_MAX 200
+
 	SceneNode* mCollision = mSceneMgr->getRootSceneNode()->createChildSceneNode("CollisionNode");
-	SceneNode* collisionNode[COLLISION_MAX];
 	Entity* collisionEntity[COLLISION_MAX];
 	for (int i = 0; i<mPattern.size(); ++i)
 	{
@@ -342,8 +354,27 @@ void PlayState::_constructTestStageSceneNode(void)
 		//mCollision->setScale(3, 3, 1);
 		collisionNode[i]->attachObject(collisionEntity[i]);
 		//collisionNode[i]->scale(2.0f, 2.0f, 2.0f);
+
+	
 	}
 }
+
+void PlayState::_crush()
+{
+	for (int i = 0; i < mPattern.size(); ++i)
+	{
+		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 2.5f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 2.5f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 100.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 100.0f)
+		{
+			//cout << 1 << endl;
+			collisionNode[i]->setPosition(Vector3(0.0f, 5000.0f, 0.0f));
+			CoinCount++;
+		}
+	}
+}
+
 
 
 void PlayState::soundInit()/*
