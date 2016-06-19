@@ -37,6 +37,7 @@ public:
 
 private:
 	void _setLights(void);
+	void _modifyLight();
 	void _drawGroundPlane(void);
 	void _drawGridPlane(void);
 	void _drawScene(void);
@@ -45,7 +46,7 @@ private:
 	void _constructTestStageSceneNode(void);
 	void _controlCharacter(const Ogre::FrameEvent& evt);
 
-
+	
 	static LobyState mLobyState;
 	std::vector<std::string> mInputFile;
 	std::vector<Ogre::Vector3> mPattern;
@@ -58,6 +59,10 @@ private:
 	OIS::Mouse* mMouse;
 
 	Ogre::Light *mLightP, *mLightD, *mLightS;
+
+	Ogre::SceneNode* m1;
+	Ogre::SceneNode* m2;
+	Ogre::SceneNode* m3;
 
 	Ogre::SceneNode* mCharacterRoot;
 	Ogre::SceneNode* mCharacterYaw;
@@ -87,6 +92,12 @@ private:
 	FMOD_SOUND *g_Sound[SD_3]; //사운드 설정하는부분
 	FMOD_CHANNEL *g_Channel[SD_3]; //채널 설정하는부분이고
 	FMOD_BOOL mIsPlaying;
+
+	float fD1, fD2, fD3;
+	float fP1, fP2, fP3;
+
+	float ffD1, ffD2, ffD3;
+	float ffP1, ffP2, ffP3;
 
 	int iCount1;
 	int iCount2;

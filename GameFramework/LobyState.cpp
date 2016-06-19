@@ -15,6 +15,14 @@ void LobyState::enter(void)
 	iCount1 = 0;
 	iCount2 = 0;
 	iCount3 = 0;
+
+
+	fD1 = 1.0f, fD2 = 0.5f, fD3 = 0.0f;
+	fP1 = 0.0f, fP2 = 1.0f, fP3 = 0.0f;
+
+	ffD1 = 0.1f, ffD2 = 0.2f, ffD3 = 0.5f;
+	ffP1 = 0.25f, ffP2 = 0.1f, ffP3 = 0.2f;
+
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
 
@@ -43,6 +51,10 @@ void LobyState::enter(void)
 	mCharacterYaw->attachObject(mCharacterEntity);
 	mCharacterEntity->setCastShadows(true);
 
+
+	m1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("LightD");
+	m2 = mSceneMgr->getRootSceneNode()->createChildSceneNode("LightP");
+	m3 = mSceneMgr->getRootSceneNode()->createChildSceneNode("LightS");
 
 	mCameraHolder->attachObject(mCamera);
 	mCamera->lookAt(mCameraYaw->getPosition());
@@ -86,6 +98,43 @@ void LobyState::resume(void)
 bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 {
 	//mAnimationState->addTime(evt.timeSinceLastFrame);
+
+	if (fD1 == 1.0f || fD1 == 0.0f)
+	{
+		ffD1 *= -1;
+	}
+
+	if (fD2 == 1.0f || fD2 == 0.0f)
+	{
+		ffD2 *= -1;
+	}
+
+
+	if (fD3 == 1.0f || fD3 == 0.0f)
+	{
+		ffD3 *= -1;
+	}
+
+	if (fP1 == 1.0f || fP1 == 0.0f)
+	{
+		ffP1 *= -1;
+	}
+
+
+	if (fP2 == 1.0f || fP2 == 0.0f)
+	{
+		ffP2 *= -1;
+	}
+
+
+	if (fP3 == 1.0f || fP3 == 0.0f)
+	{
+		ffP3 *= -1;
+	}
+
+
+
+	_modifyLight();
 
 	if (mCharacterDirection != Vector3::ZERO)
 	{
@@ -290,8 +339,28 @@ void LobyState::_setLights(void)
 
 	mLightD = mSceneMgr->createLight("LightD");
 	mLightD->setType(Light::LT_DIRECTIONAL);
-	mLightD->setDirection(Vector3(1, -2.0f, -1));
+	mLightD->setDirection(Vector3(1, -1.0f, -1));
 	mLightD->setVisible(true);
+
+	mLightP = mSceneMgr->createLight("LightP");
+	mLightP->setType(Light::LT_POINT);
+	mLightP->setPosition(Vector3(0, 150, -500)); 
+	mLightP->setVisible(true);
+
+	mLightS = mSceneMgr->createLight("LightS");
+	mLightS->setType(Light::LT_SPOTLIGHT); 
+	mLightS->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);
+	mLightS->setPosition(Vector3(0, 100, -500)); 
+	mLightS->setSpotlightRange(Degree(10), Degree(80)); 
+	mLightS->setVisible(true);
+
+}
+
+void LobyState::_modifyLight()
+{
+	mLightD->setDiffuseColour(fD1 + ffD1, fD2 + ffD2, fD3 + ffD3);
+	mLightP->setDiffuseColour(fP1 + ffP1, fP2 + ffP1, fP3 + ffP1);
+	mLightS->setDiffuseColour(0.0f, 0.0f, 1.0f);
 }
 
 void LobyState::_drawGroundPlane(void)
@@ -403,34 +472,7 @@ void LobyState::_drawGroundPlane(void)
 
 void LobyState::_drawGridPlane(void)
 {
-	// ÁÂÇ¥Ãà Ç¥½Ã
-	/*Ogre::Entity* mAxesEntity = mSceneMgr->createEntity("Axes", "axes.mesh");
-	mSceneMgr->getRootSceneNode()->createChildSceneNode("AxesNode", Ogre::Vector3(0, 0, 0))->attachObject(mAxesEntity);
-	mSceneMgr->getSceneNode("AxesNode")->setScale(5, 5, 5);*/
-
-	/*Ogre::ManualObject* gridPlane = mSceneMgr->createManualObject("GridPlane");
-	Ogre::SceneNode* gridPlaneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("GridPlaneNode");
-
-	Ogre::MaterialPtr gridPlaneMaterial = Ogre::MaterialManager::getSingleton().create("GridPlanMaterial", "General");
-	gridPlaneMaterial->setReceiveShadows(false);
-	gridPlaneMaterial->getTechnique(0)->setLightingEnabled(true);
-	gridPlaneMaterial->getTechnique(0)->getPass(0)->setDiffuse(1, 1, 1, 0);
-	gridPlaneMaterial->getTechnique(0)->getPass(0)->setAmbient(1, 1, 1);
-	gridPlaneMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(1, 1, 1);
-
-	gridPlane->begin("GridPlaneMaterial", Ogre::RenderOperation::OT_LINE_LIST);
-	for (int i = 0; i<21; i++)
-	{
-		gridPlane->position(-500.0f, 0.0f, 500.0f - i * 50);
-		gridPlane->position(500.0f, 0.0f, 500.0f - i * 50);
-
-		gridPlane->position(-500.f + i * 50, 0.f, 500.0f);
-		gridPlane->position(-500.f + i * 50, 0.f, -500.f);
-	}
-
-	gridPlane->end();
-
-	gridPlaneNode->attachObject(gridPlane);*/
+	
 }
 
 

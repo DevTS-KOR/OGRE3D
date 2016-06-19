@@ -11,6 +11,7 @@ static const float professorSpeed = 100.0f;
 Play3State Play3State::mPlay3State;
 void Play3State::enter(void)
 {
+	CoinCount = 0;
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
 
@@ -52,7 +53,7 @@ void Play3State::enter(void)
 	mAnimationState = mCharacterEntity->getAnimationState("Run");
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
-
+	_setOverlay();
 	// Sound
 	soundInit();
 	FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_Stage3], 0, &g_Channel[SD_Stage3]);
@@ -63,6 +64,7 @@ void Play3State::exit(void)
 	// Fill Here -----------------------------
 	mSceneMgr->clearScene();
 	mInformationOverlay->hide();
+	mTextOverlay->hide();
 	Release();
 	// ---------------------------------------
 }
@@ -82,6 +84,8 @@ bool Play3State::frameStarted(GameManager* game, const FrameEvent& evt)
 	mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 0.0, 800.0f * evt.timeSinceLastFrame);
 	//mCameraHolder->translate(0.0f, 0.0f, 10.0f * evt.timeSinceLastFrame);
 	_controlCharacter(evt);
+	_crush();
+	_UpdateOverlay();
 	return true;
 }
 
@@ -307,7 +311,10 @@ void Play3State::_makeTestStagePattern(void)
 				mCollisionCheck[i][cnt] = false;
 			case 1:
 				//0.25초당 한번씩(300은 1초당, 150은 0.5초당)
-				mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));
+				if(cnt == 1)
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 200.0f, (i * 150.0f)));
+				else
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));
 				mCollisionCheck[i][cnt] = true;
 				break;
 			}
@@ -327,7 +334,6 @@ void Play3State::_constructTestStageSceneNode(void)
 
 #define COLLISION_MAX 200
 	SceneNode* mCollision = mSceneMgr->getRootSceneNode()->createChildSceneNode("CollisionNode");
-	SceneNode* collisionNode[COLLISION_MAX];
 	Entity* collisionEntity[COLLISION_MAX];
 	for (int i = 0; i<mPattern.size(); ++i)
 	{
@@ -345,6 +351,55 @@ void Play3State::_constructTestStageSceneNode(void)
 	}
 }
 
+void Play3State::_crush()
+{
+	for (int i = 0; i < mPattern.size(); ++i)
+	{
+		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 2.5f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 2.5f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 100.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 100.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y > collisionNode[i]->getPosition().y - 200.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y < collisionNode[i]->getPosition().y + 200.0f)
+		{
+			//cout << 1 << endl;
+			collisionNode[i]->setPosition(Vector3(0.0f, 5000.0f, 0.0f));
+			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[COL3], 0, &g_Channel[COL3]);
+			FMOD_System_Update(g_System);
+			CoinCount++;
+		}
+	}
+}
+
+void Play3State::_setOverlay()
+{
+
+	mOverlayMgr = OverlayManager::getSingletonPtr();
+	mTextOverlay = mOverlayMgr->create("TextOverlay3");
+	mPanel = static_cast<Ogre::OverlayContainer*> (mOverlayMgr->createOverlayElement("Panel", "container3"));
+
+	mPanel->setDimensions(1, 1);
+	mPanel->setPosition(0.5f, 0.0f);
+	textBox = mOverlayMgr->createOverlayElement("TextArea", "TextID3");
+
+	textBox->setMetricsMode(Ogre::GMM_PIXELS); textBox->setPosition(10, 10);
+	textBox->setWidth(100); textBox->setHeight(20);
+	textBox->setParameter("font_name", "Font/NanumBold18");
+	textBox->setParameter("char_height", "40");
+	textBox->setColour(Ogre::ColourValue::White);
+
+	mPanel->addChild(textBox);
+	mTextOverlay->add2D(mPanel);
+	mTextOverlay->show();
+
+
+
+}
+
+void Play3State::_UpdateOverlay()
+{
+	textBox->setCaption(StringConverter::toString(CoinCount));
+}
 
 void Play3State::soundInit()/*
 						   그냥 내가 만든 함수이니까 너네 마음대로 바꿔서 쓰면됨
@@ -358,7 +413,7 @@ void Play3State::soundInit()/*
 
 	//배경음
 	FMOD_System_CreateStream(g_System, "Sound/Sound3.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[SD_Stage3]);
-
+	FMOD_System_CreateSound(g_System, "Sound/col.wav", FMOD_DEFAULT, 0, &g_Sound[COL3]);
 	// 형식은 :                g_system에, 경로, 재생 방식(계속 음악끝나면 반복), 사운드 설정 해주고
 
 
@@ -367,7 +422,7 @@ void Play3State::soundInit()/*
 
 void Play3State::Release() //마지막으로 음악 다 재생 되면 이런식으로 릴리즈해줘야 해.
 {
-	for (int i = 0; i < SD_Stage3; ++i)
+	for (int i = 0; i < COL3; ++i)
 	{
 		FMOD_Sound_Release(g_Sound[i]);
 	}

@@ -9,8 +9,11 @@ using namespace Ogre;
 
 static const float professorSpeed = 100.0f;
 PlayState PlayState::mPlayState;
+
 void PlayState::enter(void)
 {
+
+	fSpeed = 1.f;
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
 
@@ -60,7 +63,7 @@ void PlayState::enter(void)
 	mAnimationState->setEnabled(true);
 
 	_constructTestStageSceneNode();
-
+	_setOverlay();
 	CoinCount = 0;
 	// Sound
 	soundInit();
@@ -72,8 +75,11 @@ void PlayState::exit(void)
 	// Fill Here -----------------------------
 	mSceneMgr->clearScene();
 	mInformationOverlay->hide();
+	mTextOverlay->hide();
 	//mInformationOverlay2->hide();
 	Release();
+
+
 	// ---------------------------------------
 }
 
@@ -93,6 +99,7 @@ bool PlayState::frameStarted(GameManager* game, const FrameEvent& evt)
 	//mCameraHolder->translate(0.0f, 0.0f, 10.0f * evt.timeSinceLastFrame);
 	_controlCharacter(evt);
 	_crush();
+	_UpdateOverlay();
 	return true;
 }
 
@@ -174,6 +181,7 @@ bool PlayState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 		break;
 	case OIS::KC_LEFT:
 		mSceneMgr->getSceneNode("ProfessorRoot")->translate(300.0f, 0.0f, 0.0f);
+		fSpeed += 1.0f;
 		mCameraHolder->translate(-300.0f, 0.0f, 0.0f);
 		break;
 	case OIS::KC_RIGHT:
@@ -321,7 +329,10 @@ void PlayState::_makeTestStagePattern(void)
 				mCollisionCheck[i][cnt] = false;
 			case 1:
 				//0.25초당 한번씩(300은 1초당, 150은 0.5초당)
-				mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));		
+				if(cnt == 1)
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 200.0f, (i * 150.0f)));
+				else
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));		
 				mCollisionCheck[i][cnt] = true;
 				break;
 			}
@@ -366,13 +377,47 @@ void PlayState::_crush()
 		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 2.5f &&
 			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 2.5f &&
 			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 100.0f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 100.0f)
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 100.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y > collisionNode[i]->getPosition().y - 200.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y < collisionNode[i]->getPosition().y + 200.0f)
 		{
 			//cout << 1 << endl;
 			collisionNode[i]->setPosition(Vector3(0.0f, 5000.0f, 0.0f));
+			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[COL], 0, &g_Channel[COL]);
+			FMOD_System_Update(g_System);
 			CoinCount++;
 		}
 	}
+}
+
+void PlayState::_setOverlay()
+{
+
+	mOverlayMgr = OverlayManager::getSingletonPtr();
+	mTextOverlay = mOverlayMgr->create("TextOverlay");
+	mPanel = static_cast<Ogre::OverlayContainer*> (mOverlayMgr->createOverlayElement("Panel", "container1"));
+
+	mPanel->setDimensions(1, 1);
+	mPanel->setPosition(0.5f, 0.0f);
+	textBox = mOverlayMgr->createOverlayElement("TextArea", "TextID");
+
+	textBox->setMetricsMode(Ogre::GMM_PIXELS); textBox->setPosition(10, 10);
+	textBox->setWidth(100); textBox->setHeight(20);
+	textBox->setParameter("font_name", "Font/NanumBold18");
+	textBox->setParameter("char_height", "40");
+	textBox->setColour(Ogre::ColourValue::White);
+
+	mPanel->addChild(textBox);
+	mTextOverlay->add2D(mPanel);
+	mTextOverlay->show();
+
+	
+
+}
+
+void PlayState::_UpdateOverlay()
+{
+	textBox->setCaption(StringConverter::toString(CoinCount));
 }
 
 
@@ -389,6 +434,7 @@ void PlayState::soundInit()/*
 
 	//배경음
 	FMOD_System_CreateStream(g_System, "Sound/Sound1.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[SD_Stage1]);
+	FMOD_System_CreateSound(g_System, "Sound/col.wav", FMOD_DEFAULT, 0, &g_Sound[COL]);
 
 	// 형식은 :                g_system에, 경로, 재생 방식(계속 음악끝나면 반복), 사운드 설정 해주고
 
@@ -398,7 +444,7 @@ void PlayState::soundInit()/*
 
 void PlayState::Release() //마지막으로 음악 다 재생 되면 이런식으로 릴리즈해줘야 해.
 {
-	for (int i = 0; i < SD_Stage1; ++i)
+	for (int i = 0; i < COL; ++i)
 	{
 		FMOD_Sound_Release(g_Sound[i]);
 	}

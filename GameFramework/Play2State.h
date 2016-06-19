@@ -9,10 +9,10 @@ using namespace FMOD;
 #include <iostream>
 
 using namespace Ogre;
-
+#define COLLISION_MAX 1000
 enum SOUONDKIND2 {
-	SD_Stage2
-
+	SD_Stage2,
+	COL2
 };
 
 class Play2State : public GameState
@@ -38,7 +38,7 @@ public:
 	static Play2State* getInstance() { return &mPlay2State; }
 	void soundInit();
 	void Release();
-
+	SceneNode* collisionNode[COLLISION_MAX];
 private:
 	void _setLights(void);
 	void _drawGroundPlane(void);
@@ -48,8 +48,11 @@ private:
 	void _makeTestStagePattern(void);
 	void _constructTestStageSceneNode(void);
 	void _controlCharacter(const Ogre::FrameEvent& evt);
+	void _crush();
+	void _setOverlay();
+	void _UpdateOverlay();
 
-
+	int CoinCount;
 	static Play2State mPlay2State;
 	std::vector<std::string> mInputFile;
 	std::vector<Ogre::Vector3> mPattern;
@@ -80,10 +83,18 @@ private:
 
 	Ogre::Overlay*           mInformationOverlay;
 
+	Ogre::OverlaySystem* mOverlaySystem;
+	Ogre::OverlayManager*    mOverlayMgr;
+	Ogre::OverlayContainer*  mPanel;
+	Ogre::Overlay*           mTextOverlay;
+	OverlayElement*			textBox;
+	Ogre::Overlay*           mLogoOverlay;
+	Ogre::Overlay*           mDebugOverlay;
+
 	// 사운드  전역변수 3개를 선언해
 	FMOD_SYSTEM *g_System; //사운드 시스템 생성 하는 부분이고
-	FMOD_SOUND *g_Sound[1]; //사운드 설정하는부분
-	FMOD_CHANNEL *g_Channel[1]; //채널 설정하는부분이고
+	FMOD_SOUND *g_Sound[2]; //사운드 설정하는부분
+	FMOD_CHANNEL *g_Channel[2]; //채널 설정하는부분이고
 	FMOD_BOOL mIsPlaying;
 };
 
