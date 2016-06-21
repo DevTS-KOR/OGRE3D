@@ -65,7 +65,7 @@ void Play2State::exit(void)
 	mSceneMgr->clearScene();
 	mInformationOverlay->hide();
 	mTextOverlay->hide();
-	Release();
+	//Release();
 	// ---------------------------------------
 }
 
@@ -149,6 +149,7 @@ bool Play2State::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	{
 	case OIS::KC_ESCAPE:
 		Release();
+		exit();
 		game->changeState(TitleState::getInstance());
 		break;
 	case OIS::KC_UP:

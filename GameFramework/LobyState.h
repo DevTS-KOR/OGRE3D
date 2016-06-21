@@ -6,7 +6,8 @@ using namespace FMOD;
 enum SELECTSOUND {
 	SD_1,
 	SD_2,
-	SD_3
+	SD_3,
+	LOBY
 };
 
 
@@ -81,6 +82,7 @@ private:
 	Ogre::Entity*	mGround;
 	Ogre::Entity** mGroundEntity;
 
+
 	//Ogre::AnimationState* mAnimationState;
 	Ogre::AnimationState* mRunState;
 	Ogre::AnimationState* mIdleState;
@@ -89,8 +91,8 @@ private:
 	Ogre::Overlay*           mlobyOverlay;
 
 	FMOD_SYSTEM *g_System; //사운드 시스템 생성 하는 부분이고
-	FMOD_SOUND *g_Sound[SD_3]; //사운드 설정하는부분
-	FMOD_CHANNEL *g_Channel[SD_3]; //채널 설정하는부분이고
+	FMOD_SOUND *g_Sound[LOBY]; //사운드 설정하는부분
+	FMOD_CHANNEL *g_Channel[LOBY]; //채널 설정하는부분이고
 	FMOD_BOOL mIsPlaying;
 
 	float fD1, fD2, fD3;

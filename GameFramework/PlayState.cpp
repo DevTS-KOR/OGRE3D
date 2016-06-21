@@ -77,7 +77,7 @@ void PlayState::exit(void)
 	mInformationOverlay->hide();
 	mTextOverlay->hide();
 	//mInformationOverlay2->hide();
-	Release();
+	//Release();
 
 
 	// ---------------------------------------
@@ -166,6 +166,7 @@ bool PlayState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	{
 	case OIS::KC_ESCAPE:
 		Release();
+		exit();
 		game->changeState(TitleState::getInstance());
 		break;
 	case OIS::KC_UP:

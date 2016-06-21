@@ -51,7 +51,8 @@ void LobyState::enter(void)
 	mCharacterYaw->attachObject(mCharacterEntity);
 	mCharacterEntity->setCastShadows(true);
 
-
+	
+	
 	m1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("LightD");
 	m2 = mSceneMgr->getRootSceneNode()->createChildSceneNode("LightP");
 	m3 = mSceneMgr->getRootSceneNode()->createChildSceneNode("LightS");
@@ -70,10 +71,11 @@ void LobyState::enter(void)
 	mIdleState->setEnabled(true);
 	mRunState->setEnabled(false);
 
+	
 	// Sound
 	//soundInit();
-	
-
+	soundInit();
+	FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[LOBY], 0, &g_Channel[LOBY]);
 	//mAnimationState = mCharacterEntity->getAnimationState("Run");
 	//mAnimationState->setLoop(true);
 	//mAnimationState->setEnabled(true);
@@ -169,6 +171,7 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 		iCount1 += 1;
 		if (iCount1 == 1)
 		{
+			Release();
 			soundInit();
 			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_1], 0, &g_Channel[SD_1]);
 			//FMOD_Sound_Release(g_Sound[SD_2]);
@@ -180,8 +183,12 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 		if (iCount1 > 1)
 			iCount1 = 1;
 		iCount1 -= 1;
-		if(iCount1 == 0)
+		if (iCount1 == 0)
+		{
 			Release();
+			soundInit();
+			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[LOBY], 0, &g_Channel[LOBY]);
+		}
 		/*FMOD_Sound_Release(g_Sound[SD_1]);
 		FMOD_Sound_Release(g_Sound[SD_2]);
 		FMOD_Sound_Release(g_Sound[SD_3]);*/
@@ -196,6 +203,7 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 		iCount2 += 1;
 		if (iCount2 == 1)
 		{
+			Release();
 			soundInit();
 			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_2], 0, &g_Channel[SD_2]);
 			//FMOD_Sound_Release(g_Sound[SD_2]);
@@ -208,7 +216,11 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 			iCount2 = 1;
 		iCount2 -= 1;
 		if (iCount2 == 0)
+		{
 			Release();
+			soundInit();
+			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[LOBY], 0, &g_Channel[LOBY]);
+		}
 		/*FMOD_Sound_Release(g_Sound[SD_1]);
 		FMOD_Sound_Release(g_Sound[SD_2]);
 		FMOD_Sound_Release(g_Sound[SD_3]);*/
@@ -222,6 +234,7 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 		iCount3 += 1;
 		if (iCount3 == 1)
 		{
+			Release();
 			soundInit();
 			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_3], 0, &g_Channel[SD_3]);
 			//FMOD_Sound_Release(g_Sound[SD_2]);
@@ -234,7 +247,11 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 			iCount3 = 1;
 		iCount3 -= 1;
 		if (iCount3 == 0)
+		{
 			Release();
+			soundInit();
+			FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[LOBY], 0, &g_Channel[LOBY]);
+		}
 		/*FMOD_Sound_Release(g_Sound[SD_1]);
 		FMOD_Sound_Release(g_Sound[SD_2]);
 		FMOD_Sound_Release(g_Sound[SD_3]);*/
@@ -490,6 +507,7 @@ void LobyState::soundInit()/*
 	FMOD_System_CreateStream(g_System, "Sound/Sound1.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[SD_1]);
 	FMOD_System_CreateStream(g_System, "Sound/Sound2.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[SD_2]);
 	FMOD_System_CreateStream(g_System, "Sound/Sound3.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[SD_3]);
+	FMOD_System_CreateStream(g_System, "Sound/loby.mp3", FMOD_LOOP_NORMAL, 0, &g_Sound[LOBY]);
 	// 형식은 :                g_system에, 경로, 재생 방식(계속 음악끝나면 반복), 사운드 설정 해주고
 
 	//효과음 
@@ -501,7 +519,7 @@ void LobyState::soundInit()/*
 
 void LobyState::Release() //마지막으로 음악 다 재생 되면 이런식으로 릴리즈해줘야 해.
 {
-	for (int i = 0; i < SD_3; ++i)
+	for (int i = 0; i < LOBY; ++i)
 	{
 		FMOD_Sound_Release(g_Sound[i]);
 	}
