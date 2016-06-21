@@ -12,8 +12,6 @@ PlayState PlayState::mPlayState;
 
 void PlayState::enter(void)
 {
-
-	fSpeed = 1.f;
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
 
@@ -64,10 +62,12 @@ void PlayState::enter(void)
 
 	_constructTestStageSceneNode();
 	_setOverlay();
-	CoinCount = 0;
 	// Sound
 	soundInit();
 	FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_Stage1], 0, &g_Channel[SD_Stage1]);
+
+	CoinCount = 0;
+	vol = 1.0f;
 }
 
 void PlayState::exit(void)
@@ -96,10 +96,18 @@ bool PlayState::frameStarted(GameManager* game, const FrameEvent& evt)
 	mAnimationState->addTime(evt.timeSinceLastFrame);
 
 	mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 0.0, 800.0f * evt.timeSinceLastFrame);
+	mCamera->setNearClipDistance(100);
+	mCamera->setFarClipDistance(500);
 	//mCameraHolder->translate(0.0f, 0.0f, 10.0f * evt.timeSinceLastFrame);
 	_controlCharacter(evt);
 	_crush();
 	_UpdateOverlay();
+	FMOD_Channel_SetVolume(g_Channel[SD_Stage1], vol);
+
+
+	if(CoinCount > 200)
+		game->changeState(TitleState::getInstance());
+
 	return true;
 }
 
@@ -109,13 +117,11 @@ bool PlayState::frameEnded(GameManager* game, const FrameEvent& evt)
 	static Ogre::DisplayString avgFps = L"평균 FPS: ";
 	static Ogre::DisplayString bestFps = L"최고 FPS: ";
 	static Ogre::DisplayString worstFps = L"최저 FPS: ";
-	static Ogre::DisplayString Coin = L"코인 습득 : ";
 
 	OverlayElement* guiAvg = OverlayManager::getSingleton().getOverlayElement("AverageFps");
 	OverlayElement* guiCurr = OverlayManager::getSingleton().getOverlayElement("CurrFps");
 	OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("BestFps");
 	OverlayElement* guiWorst = OverlayManager::getSingleton().getOverlayElement("WorstFps");
-	OverlayElement* guiCoint = OverlayManager::getSingleton().getOverlayElement("CoinCount");
 
 	const RenderTarget::FrameStats& stats = mRoot->getAutoCreatedWindow()->getStatistics();
 
@@ -123,7 +129,6 @@ bool PlayState::frameEnded(GameManager* game, const FrameEvent& evt)
 	guiCurr->setCaption(currFps + StringConverter::toString(stats.lastFPS));
 	guiBest->setCaption(bestFps + StringConverter::toString(stats.bestFPS));
 	guiWorst->setCaption(worstFps + StringConverter::toString(stats.worstFPS));
-	guiCoint->setCaption(Coin + StringConverter::toString(stats.coinFPS));
 
 	return true;
 }
@@ -167,7 +172,8 @@ bool PlayState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	case OIS::KC_ESCAPE:
 		Release();
 		exit();
-		game->changeState(TitleState::getInstance());
+		game->changeState(LobyState::getInstance());
+		//game->changeState(TitleState::getInstance());
 		break;
 	case OIS::KC_UP:
 		mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 100.0f, 0.0f);
@@ -182,12 +188,18 @@ bool PlayState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 		break;
 	case OIS::KC_LEFT:
 		mSceneMgr->getSceneNode("ProfessorRoot")->translate(300.0f, 0.0f, 0.0f);
-		fSpeed += 1.0f;
 		mCameraHolder->translate(-300.0f, 0.0f, 0.0f);
 		break;
 	case OIS::KC_RIGHT:
 		mSceneMgr->getSceneNode("ProfessorRoot")->translate(-300.0f, 0.0f, 0.0f);
 		mCameraHolder->translate(300.0f, 0.0f, 0.0f);
+		break;
+	case OIS::KC_P:
+		vol += 0.1f;
+		break;
+
+	case OIS::KC_L:
+		vol -= 0.1f;
 		break;
 	}
 	// -----------------------------------------------------
@@ -231,7 +243,7 @@ void PlayState::_setLights(void)
 void PlayState::_drawGroundPlane(void)
 {
 	//할당할 바닥 갯수
-	int iGroundCount = 100;
+	int iGroundCount = 500;
 	//바닥을 위한 엔티티 & 씬노드 할당
 	mGroundEntity = (Entity**)malloc(sizeof(Entity*)* iGroundCount);
 	mGroundNode = (SceneNode**)malloc(sizeof(SceneNode*)* iGroundCount);
@@ -331,9 +343,9 @@ void PlayState::_makeTestStagePattern(void)
 			case 1:
 				//0.25초당 한번씩(300은 1초당, 150은 0.5초당)
 				if(cnt == 1)
-					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 200.0f, (i * 150.0f)));
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 200.0f, (i * 300.0f)));
 				else
-					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));		
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 300.0f)));
 				mCollisionCheck[i][cnt] = true;
 				break;
 			}
@@ -350,7 +362,6 @@ void PlayState::_makeTestStagePattern(void)
 
 void PlayState::_constructTestStageSceneNode(void)
 {
-
 	SceneNode* mCollision = mSceneMgr->getRootSceneNode()->createChildSceneNode("CollisionNode");
 	Entity* collisionEntity[COLLISION_MAX];
 	for (int i = 0; i<mPattern.size(); ++i)
@@ -375,10 +386,10 @@ void PlayState::_crush()
 {
 	for (int i = 0; i < mPattern.size(); ++i)
 	{
-		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 2.5f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 2.5f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 100.0f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 100.0f &&
+		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 15.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 15.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 125.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 125.0f &&
 			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y > collisionNode[i]->getPosition().y - 200.0f &&
 			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y < collisionNode[i]->getPosition().y + 200.0f)
 		{
@@ -402,8 +413,10 @@ void PlayState::_setOverlay()
 	mPanel->setPosition(0.5f, 0.0f);
 	textBox = mOverlayMgr->createOverlayElement("TextArea", "TextID");
 
-	textBox->setMetricsMode(Ogre::GMM_PIXELS); textBox->setPosition(10, 10);
-	textBox->setWidth(100); textBox->setHeight(20);
+	textBox->setMetricsMode(Ogre::GMM_PIXELS); 
+	textBox->setPosition(10, 10);
+	textBox->setWidth(100); 
+	textBox->setHeight(20);
 	textBox->setParameter("font_name", "Font/NanumBold18");
 	textBox->setParameter("char_height", "40");
 	textBox->setColour(Ogre::ColourValue::White);

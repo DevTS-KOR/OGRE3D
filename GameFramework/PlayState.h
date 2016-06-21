@@ -57,11 +57,10 @@ private:
 	static PlayState mPlayState;
 	std::vector<std::string> mInputFile;
 	std::vector<Ogre::Vector3> mPattern;
-	bool mCollisionCheck[90][7];
+	bool mCollisionCheck[2000][7];
 
-
+	float vol;
 	int CoinCount;
-	float fSpeed;
 
 	Ogre::Root *mRoot;
 	Ogre::RenderWindow* mWindow;

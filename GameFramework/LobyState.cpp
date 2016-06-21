@@ -15,14 +15,14 @@ void LobyState::enter(void)
 	iCount1 = 0;
 	iCount2 = 0;
 	iCount3 = 0;
-
+	mContinue = true;
 
 	fD1 = 1.0f, fD2 = 0.5f, fD3 = 0.0f;
 	fP1 = 0.0f, fP2 = 1.0f, fP3 = 0.0f;
 
 	ffD1 = 0.1f, ffD2 = 0.2f, ffD3 = 0.5f;
 	ffP1 = 0.25f, ffP2 = 0.1f, ffP3 = 0.2f;
-
+	vol = 1.0f;
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
 
@@ -62,7 +62,7 @@ void LobyState::enter(void)
 
 	mCharacterDirection = Ogre::Vector3::ZERO;
 
-	mIdleState = mCharacterEntity->getAnimationState("Idle");
+	mIdleState = mCharacterEntity->getAnimationState("LeftSideStep");
 	mRunState = mCharacterEntity->getAnimationState("Run");
 
 	mIdleState->setLoop(true);
@@ -257,6 +257,10 @@ bool LobyState::frameStarted(GameManager* game, const FrameEvent& evt)
 		FMOD_Sound_Release(g_Sound[SD_3]);*/
 	}
 
+	FMOD_Channel_SetVolume(g_Channel[SD_1], vol);
+	FMOD_Channel_SetVolume(g_Channel[SD_2], vol);
+	FMOD_Channel_SetVolume(g_Channel[SD_3], vol);
+	FMOD_Channel_SetVolume(g_Channel[LOBY], vol);
 	return true;
 }
 
@@ -279,7 +283,7 @@ bool LobyState::frameEnded(GameManager* game, const FrameEvent& evt)
 	guiBest->setCaption(bestFps + StringConverter::toString(stats.bestFPS));
 	guiWorst->setCaption(worstFps + StringConverter::toString(stats.worstFPS));
 
-	return true;
+	return mContinue;
 }
 
 
@@ -300,11 +304,16 @@ bool LobyState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	// Fill Here -------------------------------------------
 	switch (e.key)
 	{
+	case OIS::KC_ESCAPE:
+		mContinue = false;
+		break;
+
 	case OIS::KC_SPACE:
 		Release();
 		if (mCharacterRoot->getPosition().x >= 450.0f && mCharacterRoot->getPosition().x <= 750.0f
 			&& mCharacterRoot->getPosition().z >= 450.0f && mCharacterRoot->getPosition().z <= 750.0f)
 			game->changeState(PlayState::getInstance());
+
 
 		if (mCharacterRoot->getPosition().x >= -200.0f && mCharacterRoot->getPosition().x <= 200.0f
 			&& mCharacterRoot->getPosition().z >= 450.0f && mCharacterRoot->getPosition().z <= 750.0f)
@@ -313,14 +322,20 @@ bool LobyState::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 		if (mCharacterRoot->getPosition().x >= -750.0f && mCharacterRoot->getPosition().x <= -450.0f
 			&& mCharacterRoot->getPosition().z >= 450.0f && mCharacterRoot->getPosition().z <= 750.0f)
 			game->changeState(Play3State::getInstance());
+
 		break;
-	case OIS::KC_O:
-		game->pushState(OptionState::getInstance());
+
 	case OIS::KC_W: case OIS::KC_UP: mCharacterDirection.z += -600.0f; break;
 	case OIS::KC_S: case OIS::KC_DOWN: mCharacterDirection.z += 600.0f; break;
 	case OIS::KC_A: case OIS::KC_LEFT: mCharacterDirection.x += -600.0f; break;
 	case OIS::KC_D: case OIS::KC_RIGHT: mCharacterDirection.x += 600.0f; break;
+	case OIS::KC_P:
+		vol += 0.1f;
 		break;
+	case OIS::KC_L:
+		vol -= 0.1f;
+		break;
+
 	}
 	// -----------------------------------------------------
 

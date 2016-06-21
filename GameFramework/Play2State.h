@@ -52,11 +52,12 @@ private:
 	void _setOverlay();
 	void _UpdateOverlay();
 
+	float vol;
 	int CoinCount;
 	static Play2State mPlay2State;
 	std::vector<std::string> mInputFile;
 	std::vector<Ogre::Vector3> mPattern;
-	bool mCollisionCheck[90][7];
+	bool mCollisionCheck[2000][7];
 
 	Ogre::Root *mRoot;
 	Ogre::RenderWindow* mWindow;

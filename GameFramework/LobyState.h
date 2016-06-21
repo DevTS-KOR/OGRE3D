@@ -101,6 +101,10 @@ private:
 	float ffD1, ffD2, ffD3;
 	float ffP1, ffP2, ffP3;
 
+	float vol;
+
+	bool mContinue;
+
 	int iCount1;
 	int iCount2;
 	int iCount3;

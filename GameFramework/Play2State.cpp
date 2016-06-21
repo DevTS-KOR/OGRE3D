@@ -11,7 +11,6 @@ static const float professorSpeed = 100.0f;
 Play2State Play2State::mPlay2State;
 void Play2State::enter(void)
 {
-	CoinCount = 0;
 	mRoot = Root::getSingletonPtr();
 	mRoot->getAutoCreatedWindow()->resetStatistics();
 
@@ -57,6 +56,9 @@ void Play2State::enter(void)
 	// Sound
 	soundInit();
 	FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, g_Sound[SD_Stage2], 0, &g_Channel[SD_Stage2]);
+
+	vol = 1.0f;
+	CoinCount = 0;
 }
 
 void Play2State::exit(void)
@@ -82,10 +84,18 @@ bool Play2State::frameStarted(GameManager* game, const FrameEvent& evt)
 	mAnimationState->addTime(evt.timeSinceLastFrame);
 
 	mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 0.0, 800.0f * evt.timeSinceLastFrame);
+	mCamera->setNearClipDistance(100);
+	mCamera->setFarClipDistance(500);
 	//mCameraHolder->translate(0.0f, 0.0f, 10.0f * evt.timeSinceLastFrame);
 	_controlCharacter(evt);
 	_crush();
 	_UpdateOverlay();
+
+	FMOD_Channel_SetVolume(g_Channel[SD_Stage2], vol);
+
+	if (CoinCount > 200)
+		game->changeState(TitleState::getInstance());
+
 	return true;
 }
 
@@ -150,7 +160,8 @@ bool Play2State::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	case OIS::KC_ESCAPE:
 		Release();
 		exit();
-		game->changeState(TitleState::getInstance());
+		game->changeState(LobyState::getInstance());
+		//game->changeState(TitleState::getInstance());
 		break;
 	case OIS::KC_UP:
 		mSceneMgr->getSceneNode("ProfessorRoot")->translate(0.0f, 100.0f, 0.0f);
@@ -170,6 +181,13 @@ bool Play2State::keyPressed(GameManager* game, const OIS::KeyEvent &e)
 	case OIS::KC_RIGHT:
 		mSceneMgr->getSceneNode("ProfessorRoot")->translate(-300.0f, 0.0f, 0.0f);
 		mCameraHolder->translate(300.0f, 0.0f, 0.0f);
+		break;
+	case OIS::KC_P:
+		vol += 0.1f;
+		break;
+
+	case OIS::KC_L:
+		vol -= 0.1f;
 		break;
 	}
 	// -----------------------------------------------------
@@ -213,7 +231,7 @@ void Play2State::_setLights(void)
 void Play2State::_drawGroundPlane(void)
 {
 	//할당할 바닥 갯수
-	int iGroundCount = 100;
+	int iGroundCount = 500;
 	//바닥을 위한 엔티티 & 씬노드 할당
 	mGroundEntity = (Entity**)malloc(sizeof(Entity*)* iGroundCount);
 	mGroundNode = (SceneNode**)malloc(sizeof(SceneNode*)* iGroundCount);
@@ -313,9 +331,9 @@ void Play2State::_makeTestStagePattern(void)
 			case 1:
 				//0.25초당 한번씩(300은 1초당, 150은 0.5초당)
 				if(cnt == 1)
-					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 200.0f, (i * 150.0f)));
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 200.0f, (i * 300.0f)));
 				else
-					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 150.0f)));
+					mPattern.push_back(Vector3(cnt * 250.0f - 250.0f, 100.0f, (i * 300.0f)));
 				mCollisionCheck[i][cnt] = true;
 				break;
 			}
@@ -333,7 +351,6 @@ void Play2State::_makeTestStagePattern(void)
 void Play2State::_constructTestStageSceneNode(void)
 {
 
-#define COLLISION_MAX 200
 	SceneNode* mCollision = mSceneMgr->getRootSceneNode()->createChildSceneNode("CollisionNode");
 	Entity* collisionEntity[COLLISION_MAX];
 	for (int i = 0; i<mPattern.size(); ++i)
@@ -356,10 +373,10 @@ void Play2State::_crush()
 {
 	for (int i = 0; i < mPattern.size(); ++i)
 	{
-		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 2.5f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 2.5f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 100.0f &&
-			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 100.0f &&
+		if (mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z > collisionNode[i]->getPosition().z - 15.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().z < collisionNode[i]->getPosition().z + 15.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x > collisionNode[i]->getPosition().x - 125.0f &&
+			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().x < collisionNode[i]->getPosition().x + 125.0f &&
 			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y > collisionNode[i]->getPosition().y - 200.0f &&
 			mSceneMgr->getSceneNode("ProfessorRoot")->getPosition().y < collisionNode[i]->getPosition().y + 200.0f)
 		{
